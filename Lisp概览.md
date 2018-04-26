@@ -110,7 +110,7 @@ block structure【块结构】 | 把东西打包到定义内部的一种方法�
 
 ```
 
-img Lec1A-p3-1
+![Lec1A-p3-1.png](https://github.com/liuxian496/note-for-SICP/blob/master/img/Lec1A-p3-1.png)
 
 对使用者来说，重要的是sqrt，这种分开定义的方式容易使使用者混淆。快结构是解决打包命名问题的最简单方法。这样只有sqrt提供给使用者。改进后的算法：
 
