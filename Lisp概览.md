@@ -71,4 +71,89 @@ means of abstraction | 抽象的方法，指的是如何利用基本元素和它
 
 ## 关键词Lec1A-part3
 
+关键词 | 解释
+---|---
+recursive definition【递归定义】 | 在不增加系统负担下，在达到条件（递归出口）时，完成无限次计算
+lexical scoping【词法作用域】 | 
+block structure【块结构】 | 把东西打包到定义内部的一种方法，避免过多的定义污染，使使用者不便。
+
 ## 笔记Lec1A-part3
+
+* 递归计算平方根
+
+```
+(define (sqrt-iter guess x)
+  (if (good-enough? guess x)
+      //递归出口
+      guess
+      (sqrt-iter (improve guess x) x)))
+
+(define (improve guess x)
+  (average guess (/ x guess)))
+
+(define (average x y)
+  (/ (+ x y) 2))
+
+(define (good-enough? guess x)
+  //递归出口
+  (< (abs (- (square guess) x)) 0.001))
+
+(define (sqrt x)
+  (sqrt-iter 1.0 x))
+
+//计算9的平方根
+(sqrt 9)
+
+//计算137的平方根
+(sqrt (+ 100 37))
+
+
+```
+
+img Lec1A-p3-1
+
+对使用者来说，重要的是sqrt，这种分开定义的方式容易使使用者混淆。快结构是解决打包命名问题的最简单方法。这样只有sqrt提供给使用者。改进后的算法：
+
+```
+(define (sqrt x)
+  (define (good-enough? guess x)
+    (< (abs (- (square guess) x)) 0.001))
+  (define (improve guess x) (average guess (/ x guess)))
+  (define (sqrt-iter guess x)
+          (if (good-enough? guess x)
+              guess
+              (sqrt-iter (improve guess x) x)))
+(sqrt-iter 1.0 x))
+
+```
+
+使用快结构时，用于在最外层传入了x，内部的定义都可以使用，x可以省略。代码如下：
+
+```
+(define (sqrt x)
+  (define (good-enough? guess)
+    //递归出口
+    (< (abs (- (square guess) x)) 0.001))
+  (define (improve guess)
+    (average guess (/ x guess)))
+  (define (sqrt-iter guess)
+    (if (good-enough? guess)
+        //递归出口
+        guess
+        (sqrt-iter (improve guess))))
+(sqrt-iter 1.0))
+
+```
+
+* (DEFINE A (* 5 5))
+  
+  //D相当于其他语言中的函数
+  (DEFINE (D) (* 5 5))
+
+  输入A，值是25
+
+  输入D，值是 compound procedure D
+
+  输入(D)，值是25
+  输入(A)，值是error
+
